@@ -1,0 +1,55 @@
+{
+  "matieres": [
+    {
+      "id": 1,
+      "nom": "ANGULAR",
+      "duree": 5
+    },
+    {
+      "id": 2,
+      "nom": "REACT",
+      "duree": 4
+    },
+    {
+      "id": 3,
+      "nom": "HTML",
+      "duree": 2
+    }
+  ],
+  "formateurs": [
+    {
+      "id": 1,
+      "civilite": "M",
+      "nom": "SULTAN",
+      "prenom": "Eric",
+      "email": "e.sultan@ajc.fr",
+      "experience": 22,
+      "interne": true,
+      "dtEmbauche": "2016-07-01",
+      "adresse": {
+        "rue": "1 rue de la Paix",
+        "complement": "",
+        "codePostal": "75008",
+        "ville": "Paris",
+        "pays": "France"
+      },
+      "competences": [
+        {
+          "id": 2,
+          "nom": "REACT",
+          "duree": 4
+        }
+      ]
+    }
+  ],
+  "stagiaires": [
+    {
+      "id": 1,
+      "civilite": "MME",
+      "nom": "MACRON",
+      "prenom": "Brigitte",
+      "email": "b.macron@gmail.com",
+      "dtNaissance": "1953-04-13"
+    }
+  ]
+}

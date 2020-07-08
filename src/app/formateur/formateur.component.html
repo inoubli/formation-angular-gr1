@@ -1,0 +1,175 @@
+<div class="card mt-3">
+  <div class="card-header bg-info text-white">
+    <h2>Liste des formateurs</h2>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Civilité</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Courriel</th>
+        <th>Experience</th>
+        <th>Interne</th>
+        <th>Date d'embauche</th>
+        <th>Adresse</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let formateur of list()">
+        <td>{{formateur.id}}</td>
+        <td>{{formateur.civilite}}</td>
+        <td>{{formateur.nom | uppercase}}</td>
+        <td>{{formateur.prenom}}</td>
+        <td>{{formateur.email}}</td>
+        <td>{{formateur.experience}}</td>
+        <td><i class="far fa-check-square" *ngIf="formateur.interne"></i></td>
+        <td>{{formateur.dtEmbauche | date:"dd/MM/yyyy"}}</td>
+        <td>{{formateur.adresse?.rue}} {{formateur.adresse?.complement}}<br/>
+          {{formateur.adresse?.codePostal}} {{formateur.adresse?.ville}}<br/>
+          {{formateur.adresse?.pays}}</td>
+        <td>
+          <div class="btn-group btn-group-sm">
+            <a class="btn btn-info text-light" data-toggle="modal" data-target="#myModal" (click)="modal(formateur.id)"><i class="fa fa-bars"></i></a>
+            <a class="btn btn-primary text-light" (click)="edit(formateur.id)"><i class="fa fa-edit"></i></a>
+            <a class="btn btn-danger text-light" (click)="remove(formateur.id)"><i class="fa fa-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Choix des compétences</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div class="example-container">
+              <h2>Compétences disponibles</h2>
+
+              <div
+                cdkDropList
+                #matiereList="cdkDropList"
+                [cdkDropListData]="matieres"
+                [cdkDropListConnectedTo]="[competenceList]"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let item of matieres" cdkDrag>{{item.nom}}</div>
+              </div>
+            </div>
+
+            <div class="example-container">
+              <h2>Compétences affectées</h2>
+
+              <div
+                cdkDropList
+                #competenceList="cdkDropList"
+                [cdkDropListData]="formateurModal?.competences"
+                [cdkDropListConnectedTo]="[matiereList]"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let item of formateurModal?.competences" cdkDrag>{{item.nom}}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="saveModal()" data-dismiss="modal"><i class="fa fa-check"></i></button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <a class="btn btn-success btn-lg" (click)="add()">
+      <i class="fa fa-plus"></i>
+    </a>
+  </div>
+
+  <div class="card mt-3" *ngIf="formateurForm!=null">
+    <div class="card-header bg-info text-white">
+      <h3>Edition du formateur</h3>
+    </div>
+
+    <div class="card-body">
+      <div class="form-group">
+        <label for="civilite">Civilite:</label>
+        <select class="form-control" id="civilite" [(ngModel)]="formateurForm.civilite">
+          <option value="">Choisir une civilité</option>
+          <option value="M">Monsieur</option>
+          <option value="MME">Madame</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="nom">Nom:</label>
+        <input type="text" class="form-control" id="nom" [(ngModel)]="formateurForm.nom">
+      </div>
+      <div class="form-group">
+        <label for="prenom">Prénom:</label>
+        <input type="text" class="form-control" id="prenom" [(ngModel)]="formateurForm.prenom">
+      </div>
+      <div class="form-group">
+        <label for="email">Courriel:</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="formateurForm.email">
+      </div>
+      <div class="form-group">
+        <label for="experience">Expérience:</label>
+        <input type="number" class="form-control" id="experience" [(ngModel)]="formateurForm.experience">
+      </div>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" id="interne" [(ngModel)]="formateurForm.interne">Interne
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="dtEmbauche">Date d'embauche:</label>
+        <input type="date" class="form-control" id="dtEmbauche" [ngModel]="formateurForm.dtEmbauche | date:'yyyy-MM-dd'" (ngModelChange)="formateurForm.dtEmbauche = $event">
+      </div>
+      <div class="form-group">
+        <label for="rue">Rue:</label>
+        <input type="text" class="form-control" id="rue" [(ngModel)]="formateurForm.adresse.rue">
+      </div>
+      <div class="form-group">
+        <label for="complement">Complément:</label>
+        <input type="text" class="form-control" id="complement" [(ngModel)]="formateurForm.adresse.complement">
+      </div>
+      <div class="form-group">
+        <label for="codePostal">Code postal:</label>
+        <input type="text" class="form-control" id="codePostal" [(ngModel)]="formateurForm.adresse.codePostal">
+      </div>
+      <div class="form-group">
+        <label for="ville">Ville:</label>
+        <input type="text" class="form-control" id="ville" [(ngModel)]="formateurForm.adresse.ville">
+      </div>
+      <div class="form-group">
+        <label for="pays">Pays:</label>
+        <input type="text" class="form-control" id="pays" [(ngModel)]="formateurForm.adresse.pays">
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <div class="btn-group btn-group-lg float-right">
+        <a class="btn btn-success text-light" (click)="save()">
+          <i class="fa fa-check"></i>
+        </a>
+        <a class="btn btn-warning text-light" (click)="cancel()">
+          <i class="fa fa-undo"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
